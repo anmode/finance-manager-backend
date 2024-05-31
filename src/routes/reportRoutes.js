@@ -1,9 +1,13 @@
-const express = require('express');
-const { getMonthlyReport, getCategoryWiseReport } = require('../controllers/reportController');
-const authenticateToken = require('../middlewares/authenticateToken');
+const express = require("express");
+const {
+  generateMonthlyReport,
+  generateCategoryReport,
+} = require("../controllers/reportController");
+const authenticateToken = require("../middlewares/authenticateToken");
+
 const router = express.Router();
 
-router.get('/monthly', authenticateToken, getMonthlyReport);
-router.get('/category-wise', authenticateToken, getCategoryWiseReport);
+router.get("/monthly", authenticateToken, generateMonthlyReport);
+router.get("/category", authenticateToken, generateCategoryReport);
 
 module.exports = router;

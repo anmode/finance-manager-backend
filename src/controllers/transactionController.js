@@ -11,7 +11,9 @@ const createTransaction = async (req, res) => {
       where: { id: categoryId },
     });
     if (!categoryExists) {
-      return res.status(404).json({ error: "Category not found" });
+      return res
+        .status(404)
+        .json({ error: "Category not found or It has been deleted" });
     }
 
     const transaction = await prisma.transaction.create({

@@ -15,10 +15,12 @@ const createCategory = async (req, res) => {
 
 const getAllCategories = async (req, res) => {
   try {
-    const categories = await prisma.category.findMany();
+    const categories = await prisma.category.findMany({
+      where: { isActive: true },
+    });
     res.status(200).json(categories);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).send({ error: "Failed to fetch categories" });
   }
 };
 
@@ -55,12 +57,13 @@ const updateCategory = async (req, res) => {
 const deleteCategory = async (req, res) => {
   const { id } = req.params;
   try {
-    await prisma.category.delete({
+    await prisma.category.update({
       where: { id: parseInt(id) },
+      data: { isActive: false },
     });
-    res.status(204).end();
+    res.status(200).send({ message: "Category deactivated" });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).send({ error: "Failed to deactivate category" });
   }
 };
 
