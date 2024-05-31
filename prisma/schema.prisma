@@ -1,0 +1,42 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id          Int           @id @default(autoincrement())
+  email       String        @unique
+  password    String
+  transactions Transaction[]
+  budgets     Budget[]
+}
+
+model Transaction {
+  id         Int      @id @default(autoincrement())
+  user       User     @relation(fields: [userId], references: [id])
+  userId     Int
+  amount     Float
+  type       String   // Change enum to String
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId Int
+  date       DateTime @default(now())
+}
+
+model Category {
+  id           Int            @id @default(autoincrement())
+  name         String
+  transactions Transaction[]
+}
+
+model Budget {
+  id         Int      @id @default(autoincrement())
+  user       User     @relation(fields: [userId], references: [id])
+  userId     Int
+  amount     Float
+  month      Int
+  year       Int
+}
